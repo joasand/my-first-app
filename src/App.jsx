@@ -14,7 +14,7 @@ function App() {
   return (
     <>
       <p>
-        Hello world! This is a Vite + React + Tailwind CSS project.
+        Hello world! This is a Vite + React + Tailwind CSS project. Another test.
       </p>
     </>
   )
