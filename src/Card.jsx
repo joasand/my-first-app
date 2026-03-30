@@ -1,4 +1,4 @@
-const Card = (props) => {
+const Card = ({children}) => {
   return (
     <div style={{
          border: "1px solid #9c9c9c",
@@ -7,11 +7,9 @@ const Card = (props) => {
             borderRadius: 4, 
             color: "#9c9c9c",
       }}>
-
+      {children}
     </div>
   );
 };
 
 export default Card
-
-    // const pokemoncolors = props.pokemons.type === "Water" ? "dodgerblue" : props.pokemons.type === "Fire" ? "orangered" : props.pokemons.type === "Grass" ? "limegreen" : "gray";
