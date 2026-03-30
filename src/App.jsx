@@ -3,9 +3,11 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Scatterplot from "./Scatterplot";
 import Card from "./Card";
+import FilterCard from "./FilterCard";
 import './App.css'
 
 import * as d3 from "d3";
+import PokeCard from './PokeCard';
 
 const pokemons = [
   { id: 1, name: "Bulbasaur", type: "Grass", hp: 45, attack: 49 },
@@ -31,15 +33,63 @@ const pokemons = [
 ];
 
 export default function App() {
-  
+  const [selectedType, setSelectedType] = useState(null);
+  const [searchText, setSearchText] = useState("");
+
+  const pokemonColors = {
+    "Water": "#7ec8e3",
+    "Fire": "#e8a87c",
+    "Grass": "#a8d5a2",
+    "Electric": "#f0e68c",
+    "Psychic": "#d4a5d4",
+    "Normal": "#c0bfbf",
+    "Ghost": "#b39ddb",
+    "Dragon": "#f0c08a",
+    "Fighting": "#c9a28a",
+    "Rock": "#a8b0b5"
+  };
+
+  const pokemonTypes = [...new Set(pokemons.map(p => p.type))].sort();
+  const filteredPokemons = pokemons
+    .filter(p => !selectedType || p.type === selectedType)
+    .filter(p => p.name.toLowerCase().includes(searchText.toLowerCase()));
+  const pokemonNames = [...new Set(filteredPokemons.map(p => p.name))].sort();
+
   return (
     <>
-      <div style={{ padding: 20 }}>
-        <Scatterplot pokemons={pokemons} />
+      <h1>CHOOSE YOUR<br></br>POKÉMON CHAMPION</h1>
+      <h2>Step 1: Filter by type</h2>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        {pokemonTypes.map((type, i) => (
+          <FilterCard
+            key={i}
+            color={pokemonColors[type]}
+            selected={selectedType === type}
+            onClick={() => setSelectedType(selectedType === type ? null : type)}
+          >
+            {type}
+          </FilterCard>
+        ))}
       </div>
-
-      <div>
-        <Card />
+       <h2>Step 2: Choose your Pokémon</h2>
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        style={{
+          padding: "8px 12px",
+          marginBottom: 12,
+          width: 300,
+          borderRadius: 4,
+          border: "1px solid #9c9c9c",
+          fontSize: 16,
+        }}
+      />
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        {pokemonNames.map((name, i) => (
+          <PokeCard key={i} color={pokemonColors[pokemons.find(p => p.name === name).type]} id={pokemons.find(p => p.name === name).id}>{name}</PokeCard>
+        ))}
       </div>
     </>
   );
